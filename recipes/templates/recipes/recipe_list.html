@@ -1,0 +1,80 @@
+{% block title %}Recipes{% endblock %}
+
+{% block content %}
+<h1>Recipes</h1>
+
+{% if user.is_authenticated %}
+    <div class="mb-3">
+        <a href="{% url 'recipes:logout' %}" class="btn btn-secondary">Logout</a>
+    </div>
+
+    <!-- Add search form -->
+    <form method="get" class="mb-4">
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+
+    <!-- Data Visualization Section -->
+    {% if category_chart and difficulty_chart and cooking_time_chart %}
+    <div class="mb-4">
+        <h2>Data Visualization</h2>
+        <div class="row">
+            <div class="col-md-4">
+                <h3>Recipes by Category</h3>
+                <img src="data:image/png;base64,{{ category_chart }}" alt="Category Chart" class="img-fluid">
+            </div>
+            <div class="col-md-4">
+                <h3>Recipes by Difficulty</h3>
+                <img src="data:image/png;base64,{{ difficulty_chart }}" alt="Difficulty Chart" class="img-fluid">
+            </div>
+            <div class="col-md-4">
+                <h3>Average Cooking Time</h3>
+                <img src="data:image/png;base64,{{ cooking_time_chart }}" alt="Cooking Time Chart" class="img-fluid">
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    
+    <div class="row">
+        {% for recipe in recipes %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                    <p class="card-text">Difficulty: {{ recipe.difficulty }}</p>
+                    <p class="card-text">Category: {{ recipe.category }}</p>
+                    <p class="card-text">Cooking Time: {{ recipe.cooking_time }} minutes</p>
+                    <a href="{% url 'recipes:recipe_detail' recipe.id %}" class="btn btn-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p>No recipes found matching your search criteria.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search_term %}&search_term={{ request.GET.search_term }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.cooking_time %}&cooking_time={{ request.GET.cooking_time }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">Previous</a></li>
+            {% endif %}
+            {% for num in page_obj.paginator.page_range %}
+            <li class="page-item {% if page_obj.number == num %}active{% endif %}"><a class="page-link" href="?page={{ num }}{% if request.GET.search_term %}&search_term={{ request.GET.search_term }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.cooking_time %}&cooking_time={{ request.GET.cooking_time }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">{{ num }}</a></li>
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search_term %}&search_term={{ request.GET.search_term }}{% endif %}{% if request.GET.category %}&category={{ request.GET.category }}{% endif %}{% if request.GET.cooking_time %}&cooking_time={{ request.GET.cooking_time }}{% endif %}{% if request.GET.difficulty %}&difficulty={{ request.GET.difficulty }}{% endif %}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+{% else %}
+    <p>Please log in to view recipes.</p>
+    <a href="{% url 'recipes:login' %}" class="btn btn-primary">Login</a>
+{% endif %}
+
+{% endblock %}

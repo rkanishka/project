@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>RecipeApp Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'recipes/images/favicon.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    
+    <style type="text/css">
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .background {
+            background: url("{% static 'recipes/images/recipe.jpg' %}") no-repeat center center fixed;
+            background-size: cover;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .content {
+            text-align: center;
+            color: #fff;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 600px;
+            backdrop-filter: blur(5px);
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .btn {
+            background-color: #ff6b6b;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+            margin: 0 10px;
+        }
+
+        .btn:hover {
+            background-color: #ee5253;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background-color: #4a69bd;
+        }
+
+        .btn-secondary:hover {
+            background-color: #3c55a5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="background">
+        <div class="content">
+            <h1>Welcome to Recipe App</h1>
+            <p>Discover easy and delicious recipes for everyone. Whether you want quick meals or special dishes, we have something for you. Start cooking and enjoy great food!</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'recipes:recipe_list' %}" class="btn">Explore Recipes</a>
+                <a href="{% url 'recipes:logout' %}" class="btn btn-secondary">Logout</a>
+            {% else %}
+                <a href="{% url 'recipes:login' %}" class="btn">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

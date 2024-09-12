@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>You've successfully logged out.</h2>
+<p>Thank you for using our recipe app!</p>
+<p>We hope you enjoyed exploring our delicious recipes.</p>
+<p>Feel free to come back anytime for more culinary inspiration!</p>
+<a href="{% url 'recipes:login' %}">Log back in</a>
+<a href="{% url 'recipes:home' %}">Return to Home</a>
+{% endblock %}

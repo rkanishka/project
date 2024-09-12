@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Recipe Search</h1>
+
+<form method="get">
+    {{ form.as_p }}
+    <button type="submit">Search</button>
+</form>
+
+{% if results %}
+<h2>Search Results</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Cooking Time</th>
+            <th>Difficulty</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for recipe in results %}
+        <tr>
+            <td><a href="{% url 'recipes:recipe_detail' recipe.id %}">{{ recipe.name }}</a></td>
+            <td>{{ recipe.category }}</td>
+            <td>{{ recipe.cooking_time }} minutes</td>
+            <td>{{ recipe.difficulty }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p>No results found.</p>
+{% endif %}
+
+<h2>Data Visualization</h2>
+<h3>Number of Recipes by Category</h3>
+<img src="data:image/png;base64,{{ category_chart }}" alt="Category Chart">
+
+<h3>Distribution of Recipes by Difficulty</h3>
+<img src="data:image/png;base64,{{ difficulty_chart }}" alt="Difficulty Chart">
+
+<h3>Average Cooking Time by Category</h3>
+<img src="data:image/png;base64,{{ cooking_time_chart }}" alt="Cooking Time Chart">
+
+{% endblock %}

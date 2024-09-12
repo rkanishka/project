@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ recipe.name }}{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="recipe-detail-container">
+        <div class="auth-actions">
+            <a href="{% url 'recipes:recipe_list' %}" class="btn btn-secondary">Back to Recipes</a>
+            <a href="{% url 'recipes:logout' %}" class="btn btn-secondary">Logout</a>
+        </div>
+
+        <h1>{{ recipe.name }}</h1>
+        <img src="{{ recipe.image.url }}" alt="{{ recipe.name }}" class="recipe-image">
+        <p>{{ recipe.description }}</p>
+        <div class="recipe-info">
+            <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+            <p><strong>Cooking Time:</strong> {{ recipe.cooking_time }} minutes</p>
+            <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+            <p><strong>Difficulty:</strong> {{ difficulty }}</p>
+        </div>
+        
+        <h2>Ingredients</h2>
+        <ul class="ingredients-list">
+            {% for ingredient in recipe.ingredients.all %}
+                <li>{{ ingredient.amount }} {{ ingredient.unit }} {{ ingredient.name }}</li>
+            {% endfor %}
+        </ul>
+        
+        <h2>Instructions</h2>
+        <ol class="instructions-list">
+            {% for step in recipe.steps.all %}
+                <li>{{ step.instructions }}</li>
+            {% endfor %}
+        </ol>
+        
+        <h2>Tags</h2>
+        <div class="tag-container">
+            {% for tag in recipe.tags.all %}
+                <span class="tag" style="background-color: {{ tag.color }}">{{ tag.name }}</span>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <div class="auth-message">
+        <p>Please log in to view this recipe.</p>
+        <a href="{% url 'recipes:login' %}" class="btn btn-primary">Login</a>
+    </div>
+{% endif %}
+{% endblock %}
